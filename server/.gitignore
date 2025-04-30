@@ -1,0 +1,47 @@
+# Node.js specific
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Temporary files
+*.swp
+*.bak
+
+# Build directories (if using build tools)
+dist/
+build/
+
+# Docker related files
+.docker/
+docker-compose.override.yml
+
+# IDE files (VSCode, JetBrains, etc.)
+.vscode/
+.idea/
+
+# Operating System specific files
+.DS_Store
+Thumbs.db
+
+# .env.local for local environment settings
+.env.local
+
+# npm global packages
+.npm/
+
+# Coverage directory used by tools like Jest
+coverage/
+
+# Temporary files created by Next.js build (if applicable)
+.next/
