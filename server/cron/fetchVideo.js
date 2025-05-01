@@ -19,6 +19,7 @@ async function fetchYouTubeVideos() {
     });
 
     const videos = res.data.items;
+    console.log(videos)
     for (let item of videos) {
       const { videoId } = item.id;
       const { title, description, publishedAt, thumbnails } = item.snippet;

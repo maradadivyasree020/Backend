@@ -8,27 +8,31 @@ function VideoList() {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
-  const limit = 10; 
+  const limit = 10;
 
   const fetchVideos = async () => {
     try {
       setLoading(true);
+      const BACKEND_URL = "http://localhost:5000";
       const url = query
-        ? `/api/videos/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
-        : `/api/videos?page=${page}&limit=${limit}`;
+        ? `${BACKEND_URL}/api/videos/search?q=${encodeURIComponent(query)}&page=${page}&limit=${limit}`
+        : `${BACKEND_URL}/api/videos?page=${page}&limit=${limit}`;
 
       const res = await fetch(url);
       const data = await res.json();
 
       if (res.ok) {
+        const videoArray = Array.isArray(data) ? data : data.videos;
+
         if (page === 1) {
-          setVideos(data.videos);
+          setVideos(videoArray); 
         } else {
-          setVideos((prev) => [...prev, ...data.videos]);
+          setVideos((prev) => [...prev, ...videoArray]); 
         }
-        setHasMore(data.videos.length === limit);
+
+        setHasMore(videoArray.length === limit); 
       } else {
-        console.error('Error fetching videos:', data.message);
+        console.error('Error fetching videos:', data.message || data);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -44,7 +48,7 @@ function VideoList() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setPage(1);
+    setPage(1); 
     fetchVideos();
   };
 
@@ -74,15 +78,16 @@ function VideoList() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
           {videos.map((video) => (
             <Link to={`/video/${video.videoId}`} key={video.videoId}>
-              <div className="bg-white rounded shadow hover:shadow-lg transition overflow-hidden">
+              <div className="bg-white rounded shadow-lg hover:shadow-xl transition overflow-hidden flex flex-col h-96">
                 <img
                   src={video.thumbnails?.high?.url}
                   alt={video.title}
                   className="w-full h-48 object-cover"
                 />
-                <div className="p-4">
-                  <h2 className="text-lg font-bold mb-1">{video.title}</h2>
-                  <p className="text-sm text-gray-600 line-clamp-2">{video.description}</p>
+
+                <div className="p-4 flex-1 flex flex-col justify-between">
+                  <h2 className="text-lg font-bold mb-1 line-clamp-2">{video.title}</h2>
+                  <p className="text-sm text-gray-600 line-clamp-3 mb-2">{video.description}</p>
                   <p className="text-xs text-gray-500 mt-2">
                     Published: {new Date(video.publishedAt).toLocaleString()}
                   </p>
